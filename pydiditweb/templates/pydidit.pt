@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>pydidit.</title>
+  </head>
+  <body>
+    <div id="pydidit">
+    </div>
+    <script type="text/template" id="todos-template">
+      <label for="description">Create Todo:</label>
+      <input type="text" id="description" name="description">
+      <button id="create">Create!</button>
+      <ul>
+      </ul>
+    </script>
+    <script type="text/template" id="todo-template">
+      <%= description %> <button class="edit">Edit</button> <button class="remove">Remove</button>
+    </script>
+    <script type="text/template" id="edit-template">
+      <label for="edit_description">Edit Todo:</label>
+      <input type="text" id="edit-description" name="edit-description" value="<%= description %>">
+      <button class="save">Save</button>
+    </script>
+    <script data-main="${request.static_url('pydiditweb:static/js/pydidit.js')}" src="${request.static_url('pydiditweb:static/js/require.js')}"></script>
+    <script>
+      require.config({
+        paths: {
+          'jquery': 'jquery-2.1.1.min'
+        },
+        shim: {
+          'underscore-min': {
+            exports: '_'
+          },
+          'backbone-min': {
+            deps: ['jquery', 'underscore-min'],
+            exports: 'Backbone'
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

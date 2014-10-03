@@ -1,0 +1,5 @@
+      [paste.app_factory]
+      main = pydiditweb:main
+      [console_scripts]
+      initialize_pydidit-web_db = pydiditweb.scripts.initializedb:main
+      
