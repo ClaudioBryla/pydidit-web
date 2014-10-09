@@ -31,7 +31,7 @@ def pydidit(request):
 # Grab all of our todos and return a big fat JSON ball of todo goodness.
 @view_config(route_name='get_todos', renderer='string')
 def get_todos(request):
-    return json.dumps(b.get('Todo', True), default=datetime_handler)
+    return json.dumps(b.get('Todo', filter_by={'state': 'active'}), default=datetime_handler)
 
 # Create a todo.
 @view_config(route_name='create_todo', renderer='string')
@@ -43,6 +43,8 @@ def create_todo(request):
 @view_config(route_name='edit_todo')
 def edit_todo(request):
     update_todo = b.get('Todo', filter_by={'id': request.matchdict['id']})
+    if request.json_body['state'] == 'completed':
+        b.set_completed(update_todo[0])
     # Todo: Convert all timestamps to datetime in json_body so that the whole thing can be passed below.
     b.set_attributes(update_todo[0], {'description': request.json_body['description']})
     b.commit()
