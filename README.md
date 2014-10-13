@@ -1,4 +1,4 @@
-pydidit-backend
+pydidit-web
 ==========================
 
 pydidit is a todo system flexible enough to fit your style.
