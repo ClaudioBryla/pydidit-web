@@ -9,6 +9,7 @@ Authors
 -------
 
 Claudio Bryla <claudiobryla@gmail.com>
+
 Adam J. Lincoln <adamjlincoln@gmail.com>
 
 Credits
