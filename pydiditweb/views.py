@@ -6,7 +6,7 @@ from sqlalchemy.exc import DBAPIError
 
 from .models import (
     DBSession,
-    MyModel,
+    #MyModel,
     )
 
 # We can't survive without it.
