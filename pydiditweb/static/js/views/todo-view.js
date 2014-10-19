@@ -9,12 +9,15 @@ define([
 ) {
 	TodoView = Backbone.View.extend({
 		tagName: 'li',
+		className: 'todo',
 		template: _.template($('#todo-template').html()),
 
 		events: {
 			'click .remove': 'remove',
 			'click .edit': 'edit',
-			'click .save': 'save'
+			'click .save': 'save',	
+			'click .complete': 'complete',
+			'click': 'model_dump' // For debug.
 		},
 
 		render: function() {
@@ -33,9 +36,19 @@ define([
 		},
 
 		save: function() {
-			var description = this.$el.children('#edit-description').val();
+			var description = this.$el.children('form').children('div').children('#edit-description').val();
 			this.model.save({'description': description});
 			this.render();
+		},
+
+		complete: function() {
+			this.$el.remove();
+			this.model.save({'state': 'completed'});
+		},
+
+		model_dump: function() {
+			// Dumps model to console.
+			console.log(this.model);
 		}
 	});
 

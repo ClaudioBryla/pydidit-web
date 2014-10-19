@@ -1,33 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>pydidit.</title>
+    <!-- Bootstrap -->
+    <link href="${request.static_url('pydiditweb:static/css/bootstrap.min.css')}" rel="stylesheet">
+    <!-- Stylesheet of Awesome -->
+    <link href="${request.static_url('pydiditweb:static/css/style.css')}" rel="stylesheet">
   </head>
   <body>
-    <div id="pydidit">
+    <div id="pydidit" class="container">
     </div>
     <script type="text/template" id="todos-template">
-      <label for="description">Create Todo:</label>
-      <input type="text" id="description" name="description">
-      <button id="create">Create!</button>
-      <ul>
-      </ul>
+      <h1>Todos:</h1>
+      <ol>
+      </ol>
+      <form role="form" class="well">
+        <div class="form-group">
+          <label for="description" class="control-label">Create Todo:</label>
+          <input type="text" class="form-control" id="description" name="description" />
+        </div>
+        <button type="button" class="btn btn-default" id="create">Create!</button>
+      </form>
     </script>
     <script type="text/template" id="todo-template">
-      <%= description %> <button class="edit">Edit</button> <button class="remove">Remove</button>
+      <%= description %> <button type="button" class="btn btn-success btn-xs complete">Complete</button> <button type="button" class="btn btn-warning btn-xs edit">Edit</button> <button type="button" class="btn btn-danger btn-xs remove">Remove</button>
     </script>
     <script type="text/template" id="edit-template">
-      <label for="edit_description">Edit Todo:</label>
-      <input type="text" id="edit-description" name="edit-description" value="<%= description %>">
-      <button class="save">Save</button>
+      <form role="form" class="well">
+        <div class="form-group">
+          <label for="edit_description" class="control-label">Edit Todo:</label>
+          <input type="text" class="form-control" id="edit-description" name="edit-description" value="<%= description %>" />
+        </div>
+        <button type="button" class="btn btn-default save">Save</button>
+      </form>
     </script>
     <script data-main="${request.static_url('pydiditweb:static/js/pydidit.js')}" src="${request.static_url('pydiditweb:static/js/require.js')}"></script>
     <script>
       require.config({
         paths: {
-          'jquery': 'jquery-2.1.1.min'
+          'jquery': 'jquery-2.1.1.min',
+          'bootstrap': 'bootstrap.min'
         },
         shim: {
+          'bootstrap': {
+            deps: ['jquery']
+          },
           'underscore-min': {
             exports: '_'
           },

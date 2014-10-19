@@ -26,13 +26,13 @@ define([
 
 			_.each(this.collection.models, function(todo) {
 				var todoView = new TodoView({'model': todo});
-				this.$el.children('ul').append(todoView.render().el);	
+				this.$el.children('ol').append(todoView.render().el);	
 			}, this);
 		},
 
 		renderOne: function(todo) {
 			var todoView = new TodoView({'model': todo});
-			this.$el.children('ul').append(todoView.render().el);
+			this.$el.children('ol').append(todoView.render().el);
 		},
 
 		create: function() {
