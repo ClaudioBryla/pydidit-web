@@ -8,30 +8,42 @@
     <link href="${request.static_url('pydiditweb:static/css/bootstrap.min.css')}" rel="stylesheet">
     <!-- Stylesheet of Awesome -->
     <link href="${request.static_url('pydiditweb:static/css/style.css')}" rel="stylesheet">
+    <!-- jQuery UI stylesheet -->
+    <link href="${request.static_url('pydiditweb:static/css/jquery-ui.min.css')}" rel="stylesheet">
   </head>
   <body>
     <div id="pydidit" class="container">
     </div>
     <script type="text/template" id="todos-template">
       <h1>Todos:</h1>
-      <ol>
-      </ol>
-      <form role="form" class="well">
-        <div class="form-group">
-          <label for="description" class="control-label">Create Todo:</label>
-          <input type="text" class="form-control" id="description" name="description" />
-        </div>
-        <button type="button" class="btn btn-default" id="create">Create!</button>
-      </form>
+      <ul class="todos-list">
+      </ul>
+      <div role="form" class="well form-group">
+        <label for="description" class="control-label">Create Todo:</label>
+        <input type="text" class="form-control" id="description" name="description" />
+      <button type="button" class="btn btn-default" id="create">Create!</button>
+      </div>
     </script>
     <script type="text/template" id="todo-template">
-      <%= description %> <button type="button" class="btn btn-success btn-xs complete">Complete</button> <button type="button" class="btn btn-warning btn-xs edit">Edit</button> <button type="button" class="btn btn-danger btn-xs remove">Remove</button>
+      <%- description %>
+      <div class="btn-group">
+      <button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
+        <span class="caret" />
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li>Created at <%- created_at_formatted %></li>
+        <li>Display position <%- display_position %></li>
+      </ul>
+      </div>
+      <button type="button" class="btn btn-success btn-xs complete">Complete</button>
+      <button type="button" class="btn btn-warning btn-xs edit">Edit</button>
+      <button type="button" class="btn btn-danger btn-xs remove">Remove</button>
     </script>
     <script type="text/template" id="edit-template">
       <form role="form" class="well">
         <div class="form-group">
           <label for="edit_description" class="control-label">Edit Todo:</label>
-          <input type="text" class="form-control" id="edit-description" name="edit-description" value="<%= description %>" />
+          <input type="text" class="form-control" id="edit-description" name="edit-description" value="<%- description %>" />
         </div>
         <button type="button" class="btn btn-default save">Save</button>
       </form>
@@ -41,7 +53,8 @@
       require.config({
         paths: {
           'jquery': 'jquery-2.1.1.min',
-          'bootstrap': 'bootstrap.min'
+          'bootstrap': 'bootstrap.min',
+          'jqueryui': 'jquery-ui-1.11.2/jquery-ui.min'
         },
         shim: {
           'bootstrap': {
@@ -53,6 +66,9 @@
           'backbone-min': {
             deps: ['jquery', 'underscore-min'],
             exports: 'Backbone'
+          },
+          'jqueryui': {
+            deps: ['jquery'],
           }
         }
       });
