@@ -1,3 +1,6 @@
 .todo {
 	margin: 5px;
 }
+.todos-list {
+	list-style-type: none;
+}
