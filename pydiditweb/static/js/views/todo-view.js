@@ -1,56 +1,78 @@
 define([
-	'jquery',
-	'underscore-min',
-	'backbone-min'
+    'jquery',
+    'underscore-min',
+    'backbone-min'
 ], function (
-	$,
-	_,
-	Backbone
+    $,
+    _,
+    Backbone
 ) {
-	TodoView = Backbone.View.extend({
-		tagName: 'li',
-		className: 'todo',
-		template: _.template($('#todo-template').html()),
+    TodoView = Backbone.View.extend({
+        tagName: 'li',
+        className: 'todo',
+        template: _.template($('#todo-template').html()),
 
-		events: {
-			'click .remove': 'remove',
-			'click .edit': 'edit',
-			'click .save': 'save',	
-			'click .complete': 'complete',
-			'click': 'model_dump' // For debug.
-		},
+        events: {
+            'click .remove': 'remove',
+            'click .edit': 'edit',
+            'click .save': 'save',
+            'click .complete': 'complete',
+            'click': 'model_dump' // For debug.
+        },
 
-		render: function() {
-			this.$el.html(this.template(this.model.toJSON()));
-			return this;
-		},
+        initialize: function() {
+            this.listenTo(this.model, 'change', this.render);
+        },
 
-		remove: function() {
-    		this.$el.remove();  
-			this.model.destroy();
-		},
+        render: function() {
+            var todoJSON = this.model.toJSON();
+            // Protect against null values that are assigned by the backend later
+            var success = false;
+            while (!success) {
+                success = true;
+                try {
+                    this.$el.html(this.template(todoJSON));
+                } catch (err) {
+                    console.log(err);
+                    var errorWords = err.message.split(' ');
+                    if (errorWords.slice(1).join(' ') === 'is not defined') {
+                        success = false;
+                        todoJSON[errorWords[0]] = null;
+                    } else {
+                        throw err;
+                    }
+                }
+            }
+            this.$el.data('todo-id', this.model.get('id'));
+            return this;
+        },
 
-		edit: function() {
-			var editTemplate = _.template($('#edit-template').html());
-			this.$el.html(editTemplate(this.model.toJSON()));
-		},
+        remove: function() {
+            this.$el.remove();
+            this.model.destroy();
+        },
 
-		save: function() {
-			var description = this.$el.children('form').children('div').children('#edit-description').val();
-			this.model.save({'description': description});
-			this.render();
-		},
+        edit: function() {
+            var editTemplate = _.template($('#edit-template').html());
+            this.$el.html(editTemplate(this.model.toJSON()));
+        },
 
-		complete: function() {
-			this.$el.remove();
-			this.model.save({'state': 'completed'});
-		},
+        save: function() {
+            var description = this.$el.children('form').children('div').children('#edit-description').val();
+            this.model.save({'description': description});
+            this.render();
+        },
 
-		model_dump: function() {
-			// Dumps model to console.
-			console.log(this.model);
-		}
-	});
+        complete: function() {
+            this.$el.remove();
+            this.model.save({'state': 'completed'});
+        },
 
-	return TodoView;	
+        model_dump: function() {
+            // Dumps model to console.
+            console.log(this.model);
+        }
+    });
+
+    return TodoView;
 });
