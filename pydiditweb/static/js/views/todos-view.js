@@ -3,6 +3,7 @@ define([
     'underscore-min',
     'backbone-min',
     'views/todo-view',
+    'bootstrap',
     'jqueryui'
 ], function (
     $,
