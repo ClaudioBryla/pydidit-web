@@ -3,7 +3,8 @@ require([
     'underscore-min',
     'backbone-min',
     'collections/todos',
-    'views/todos-view'
+    'views/todos-view',
+    'bootstrap'
 ], function(
     $,
     _,

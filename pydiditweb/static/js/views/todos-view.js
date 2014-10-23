@@ -12,8 +12,8 @@ define([
     TodoView
 ) {
     TodosView = Backbone.View.extend({
-        el: '#pydidit',
-        template: _.template($('#todos-template').html()),
+        el: '#todo-tab',
+        template: _.template($('#tab-template').html()),
 
         events: {
             'click #create': 'create'
@@ -30,15 +30,27 @@ define([
 
         sortStartDisplayPosition: null,
 
+        createDivId: 'todo-create-div',
+
+        ulClass: 'todos-list',
+
         render: function() {
-            this.$el.html(this.template());
-            this.$el.children('ul').sortable({
+            var todosDiv = $(this.template({
+                'tabTitle': 'Todos:',
+                'ulClass': this.ulClass,
+                'createDivId': this.createDivId,
+            }));
+            var todoCreateNodes = $(_.template($('#todo-create-template').html())());
+            todosDiv.children('#' + this.createDivId).prepend(todoCreateNodes);
+            this.$el.append(todosDiv);
+
+            todosDiv.children('.' + this.ulClass).sortable({
                 start: $.proxy(function(ev, ui) {
                     this.sortStartDisplayPosition = ui.item.data('todoDisplayPosition');
                 }, this),
                 update: $.proxy(function(ev, ui) {
                     // Lock it while we wait for the server
-                    this.$el.children('ul').sortable('option', 'disabled', true);
+                    todosDiv.children('.' + this.ulClass).sortable('option', 'disabled', true);
                     var next = ui.item.next();
                     var todoToMove = this.collection.get(ui.item.data('todoId'))
                     if (_.size(next) === 0) { // Move to end
@@ -49,9 +61,9 @@ define([
                     todoToMove.save({}, {
                         success: function(todo, resp, options) {
                             // Loop through and fetch models that may have changed
-                            var promises = _.map(todo.collection.filter(function(another_todo) { // Bad name, might actually be the same one
+                            var promises = _.map(todo.collection.filter(function(another_todo) { // Bad name, might actually be the same todo
                                 // I'm aware that this is doing a double fetch - one end of each of these cases should not have the equals
-                                // part because the todo just moved is already fetched.  But it's too late right now for me to determine this.
+                                // part because the todo just moved is already fetched.  But it's too late in the day right now for me to determine this.
                                 if (options.this.sortStartDisplayPosition < resp.display_position) { // Moving down
                                     return options.this.sortStartDisplayPosition <= another_todo.get('display_position') &&
                                            another_todo.get('display_position') <= resp.display_position;
@@ -62,21 +74,23 @@ define([
                             }), function(another_todo) {
                                 return another_todo.fetch();
                             });
+
                             $.when.apply($, promises).done(function() {
                                 // Unlock it
-                                options.this.$el.children('ul').sortable('option', 'disabled', false);
+                                todosDiv.children('.' + options.this.ulClass).sortable('option', 'disabled', false);
                             });
                         },
                         this: this
                     });
                 }, this),
             });
+
             _.each(this.collection.models, this.renderOne);
         },
 
         renderOne: function(todo) {
             var todoView = new TodoView({'model': todo});
-            this.$el.children('ul').append(todoView.render().el);
+            this.$el.find('div .' + this.ulClass).append(todoView.render().el);
         },
 
         create: function() {

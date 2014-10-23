@@ -13,16 +13,30 @@
   </head>
   <body>
     <div id="pydidit" class="container">
-    </div>
-    <script type="text/template" id="todos-template">
-      <h1>Todos:</h1>
-      <ul class="todos-list">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#todo-tab" data-toggle="tab">Todos</a></li>
+        <li><a href="#project-tab" data-toggle="tab">Projects</a></li>
       </ul>
-      <div role="form" class="well form-group">
-        <label for="description" class="control-label">Create Todo:</label>
-        <input type="text" class="form-control" id="description" name="description" />
-        <button type="button" class="btn btn-default" id="create">Create!</button>
+      <div class="tab-content">
+        <div id="todo-tab" class="tab-pane active">
+        </div>
+        <div id="project-tab" class="tab-pane">
+        </div>
       </div>
+    </div>
+    <script type="text/template" id="tab-template">
+      <div>
+        <h1><%- tabTitle %></h1>
+        <ul class="<%- ulClass %>">
+        </ul>
+        <div id="<%- createDivId %>" role="form" class="well form-group">
+          <button type="button" class="btn btn-default" id="create">Create!</button>
+        </div>
+      </div>
+    </script>
+    <script type="text/template" id="todo-create-template">
+      <label for="description" class="control-label">Create Todo:</label>
+      <input type="text" class="form-control" id="description" name="description" />
     </script>
     <script type="text/template" id="todo-template">
       <%- description %>
