@@ -35,9 +35,9 @@
         <li>Display position <%- display_position %></li>
       </ul>
       </div>
-      <button type="button" class="btn btn-success btn-xs complete">Complete</button>
-      <button type="button" class="btn btn-warning btn-xs edit">Edit</button>
-      <button type="button" class="btn btn-danger btn-xs remove">Remove</button>
+      <button type="button" class="btn btn-success btn-xs complete"><span class="glyphicon glyphicon-ok" /></button>
+      <button type="button" class="btn btn-warning btn-xs edit"><span class="glyphicon glyphicon-pencil" /></button>
+      <button type="button" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove" /></button>
     </script>
     <script type="text/template" id="edit-template">
       <div role="form" class="well form-group">

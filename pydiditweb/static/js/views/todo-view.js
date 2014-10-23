@@ -49,7 +49,13 @@ define([
         },
 
         remove: function() {
-            this.$el.remove();
+            this.$el.addClass('bg-danger');
+            this.$el.hide(
+                'slow',
+                function() {
+                    $(this).remove();
+                }
+            );
             this.model.destroy();
         },
 
@@ -65,7 +71,13 @@ define([
         },
 
         complete: function() {
-            this.$el.remove();
+            this.$el.addClass('bg-success');
+            this.$el.hide(
+                'slow',
+                function() {
+                    $(this).remove();
+                }
+            );
             this.model.save({'state': 'completed'});
         },
 

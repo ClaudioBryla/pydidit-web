@@ -1,6 +1,18 @@
 .todo {
-	margin: 5px;
+    margin: 5px;
 }
 .todos-list {
-	list-style-type: none;
+    list-style-type: none;
+}
+li.bg-danger {
+    background-color: #f2dede;
+}
+li.bg-danger:hover {
+    background-color: #e4b9b9;
+}
+li.bg-success {
+    background-color: #dff0d8;
+}
+li.bg-success:hover {
+    background-color: #c1e2b3;
 }
