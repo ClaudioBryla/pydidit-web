@@ -21,7 +21,7 @@
       <div role="form" class="well form-group">
         <label for="description" class="control-label">Create Todo:</label>
         <input type="text" class="form-control" id="description" name="description" />
-      <button type="button" class="btn btn-default" id="create">Create!</button>
+        <button type="button" class="btn btn-default" id="create">Create!</button>
       </div>
     </script>
     <script type="text/template" id="todo-template">
@@ -40,13 +40,11 @@
       <button type="button" class="btn btn-danger btn-xs remove">Remove</button>
     </script>
     <script type="text/template" id="edit-template">
-      <form role="form" class="well">
-        <div class="form-group">
-          <label for="edit_description" class="control-label">Edit Todo:</label>
-          <input type="text" class="form-control" id="edit-description" name="edit-description" value="<%- description %>" />
-        </div>
+      <div role="form" class="well form-group">
+        <label for="edit_description" class="control-label">Edit Todo:</label>
+        <input type="text" class="form-control" id="edit-description" name="edit-description" value="<%- description %>" />
         <button type="button" class="btn btn-default save">Save</button>
-      </form>
+      </div>
     </script>
     <script data-main="${request.static_url('pydiditweb:static/js/pydidit.js')}" src="${request.static_url('pydiditweb:static/js/require.js')}"></script>
     <script>

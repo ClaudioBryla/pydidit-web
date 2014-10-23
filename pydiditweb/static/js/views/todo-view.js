@@ -59,7 +59,7 @@ define([
         },
 
         save: function() {
-            var description = this.$el.children('form').children('div').children('#edit-description').val();
+            var description = this.$el.children('div').children('#edit-description').val();
             this.model.save({'description': description});
             this.render();
         },
