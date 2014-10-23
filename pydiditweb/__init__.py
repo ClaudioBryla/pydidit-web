@@ -19,6 +19,7 @@ def main(global_config, **settings):
     
     # Todo Routes
     config.add_route('get_todos', '/api/todos', request_method='GET')
+    config.add_route('get_todo', '/api/todos/{id}', request_method='GET')
     config.add_route('create_todo', '/api/todos', request_method='POST')
     config.add_route('edit_todo', '/api/todos/{id}', request_method='PUT')
     config.add_route('delete_todo', '/api/todos/{id}', request_method='DELETE')
