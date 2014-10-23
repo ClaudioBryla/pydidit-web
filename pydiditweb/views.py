@@ -33,6 +33,10 @@ def pydidit(request):
 def get_todos(request):
     return json.dumps(b.get('Todo', filter_by={'state': 'active'}), default=datetime_handler)
 
+@view_config(route_name='get_todo', renderer='string')
+def get_todo(request):
+    return json.dumps(b.get('Todo', filter_by={'id': request.matchdict['id']})[0], default=datetime_handler)
+
 # Create a todo.
 @view_config(route_name='create_todo', renderer='string')
 def create_todo(request):
@@ -40,15 +44,27 @@ def create_todo(request):
     return json.dumps(b.get('Todo', filter_by={'id': new_todo['id']}), default=datetime_handler)
 
 # Edit a todo.
-@view_config(route_name='edit_todo')
+@view_config(route_name='edit_todo', renderer='string')
 def edit_todo(request):
-    update_todo = b.get('Todo', filter_by={'id': request.matchdict['id']})
+    update_todo = b.get('Todo', filter_by={'id': request.matchdict['id']})[0]
+    control = None
+    if 'pydiditweb_control' in request.json_body:
+        control = request.json_body['pydiditweb_control']
+        del request.json_body['pydiditweb_control']
+    # Right now, you can only do one thing per call: set completed, move, update other attributes
+    # These are in no particular order, really
     if request.json_body['state'] == 'completed':
-        b.set_completed(update_todo[0])
-    # Todo: Convert all timestamps to datetime in json_body so that the whole thing can be passed below.
-    b.set_attributes(update_todo[0], {'description': request.json_body['description']})
+        b.set_completed(update_todo)
+    elif control is not None:
+        if 'move_to_anchor' in control:
+            update_todo['display_position'] = b.move(update_todo, anchor=control['move_to_anchor'], model_name='Todo')
+        elif 'sink_all_the_way' in control and control['sink_all_the_way']:
+            update_todo['display_position'] = b.move(update_todo, direction='sink', all_the_way=True)
+    else:
+        # Todo: Convert all timestamps to datetime in json_body so that the whole thing can be passed below.
+        b.set_attributes(update_todo, {'description': request.json_body['description']})
     b.commit()
-    return Response('OK')
+    return json.dumps(update_todo, default=datetime_handler)
 
 @view_config(route_name='delete_todo')
 def delete_todo(request):

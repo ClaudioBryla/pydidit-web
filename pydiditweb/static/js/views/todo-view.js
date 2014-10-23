@@ -43,7 +43,8 @@ define([
                     }
                 }
             }
-            this.$el.data('todo-id', this.model.get('id'));
+            this.$el.data('todoId', this.model.get('id'));
+            this.$el.data('todoDisplayPosition', this.model.get('display_position'));
             return this;
         },
 
