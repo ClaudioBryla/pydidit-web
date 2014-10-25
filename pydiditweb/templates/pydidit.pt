@@ -74,7 +74,7 @@
     </script>
     <script type="text/template" id="edit-template">
       <div role="form" class="well form-group">
-        <label for="edit_description" class="control-label">Edit Todo:</label>
+        <label for="edit_description" class="control-label">Edit <%- type %>:</label>
         <input type="text" class="form-control" id="edit-description" name="edit-description" value="<%- description %>" />
         <button type="button" class="btn btn-default save">Save</button>
       </div>
