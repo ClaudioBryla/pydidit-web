@@ -11,6 +11,7 @@ define([
 ) {
     Todo = Backbone.Model.extend({
         initialize: function() {
+            this.set('type', 'Todo');
         },
 
         parse: function(response, options) {

@@ -11,6 +11,7 @@ define([
 ) {
     Project = Backbone.Model.extend({
         initialize: function() {
+            this.set('type', 'Project');
         },
 
         parse: function(response, options) {
