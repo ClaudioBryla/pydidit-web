@@ -38,6 +38,10 @@
       <label for="description" class="control-label">Create Todo:</label>
       <input type="text" class="form-control" id="description" name="description" />
     </script>
+    <script type="text/template" id="project-create-template">
+      <label for="description" class="control-label">Create Project:</label>
+      <input type="text" class="form-control" id="description" name="description" />
+    </script>
     <script type="text/template" id="todo-template">
       <%- description %>
       <div class="btn-group">
@@ -49,9 +53,24 @@
         <li>Display position <%- display_position %></li>
       </ul>
       </div>
-      <button type="button" class="btn btn-success btn-xs complete"><span class="glyphicon glyphicon-ok" /></button>
-      <button type="button" class="btn btn-warning btn-xs edit"><span class="glyphicon glyphicon-pencil" /></button>
-      <button type="button" class="btn btn-danger btn-xs remove"><span class="glyphicon glyphicon-remove" /></button>
+      <button type="button" class="btn btn-success btn-xs complete-todo"><span class="glyphicon glyphicon-ok" /></button>
+      <button type="button" class="btn btn-warning btn-xs edit-todo"><span class="glyphicon glyphicon-pencil" /></button>
+      <button type="button" class="btn btn-danger btn-xs remove-todo"><span class="glyphicon glyphicon-remove" /></button>
+    </script>
+    <script type="text/template" id="project-template">
+      <%- description %>
+      <div class="btn-group">
+      <button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
+        <span class="caret" />
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li>Created at <%- created_at_formatted %></li>
+        <li>Display position <%- display_position %></li>
+      </ul>
+      </div>
+      <button type="button" class="btn btn-success btn-xs complete-project"><span class="glyphicon glyphicon-ok" /></button>
+      <button type="button" class="btn btn-warning btn-xs edit-project"><span class="glyphicon glyphicon-pencil" /></button>
+      <button type="button" class="btn btn-danger btn-xs remove-project"><span class="glyphicon glyphicon-remove" /></button>
     </script>
     <script type="text/template" id="edit-template">
       <div role="form" class="well form-group">

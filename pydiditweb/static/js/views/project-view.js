@@ -7,16 +7,16 @@ define([
     _,
     Backbone
 ) {
-    TodoView = Backbone.View.extend({
+    ProjectView = Backbone.View.extend({
         tagName: 'li',
-        className: 'todo',
-        template: _.template($('#todo-template').html()),
+        className: 'project',
+        template: _.template($('#project-template').html()),
 
         events: {
-            'click .remove-todo': 'remove',
-            'click .edit-todo': 'edit',
+            'click .remove-project': 'remove',
+            'click .edit-project': 'edit',
             'click .save': 'save',
-            'click .complete-todo': 'complete',
+            'click .complete-project': 'complete',
             'click': 'model_dump' // For debug.
         },
 
@@ -25,26 +25,26 @@ define([
         },
 
         render: function() {
-            var todoJSON = this.model.toJSON();
+            var projectJSON = this.model.toJSON();
             // Protect against null values that are assigned by the backend later
             var success = false;
             while (!success) {
                 success = true;
                 try {
-                    this.$el.html(this.template(todoJSON));
+                    this.$el.html(this.template(projectJSON));
                 } catch (err) {
                     console.log(err);
                     var errorWords = err.message.split(' ');
                     if (errorWords.slice(1).join(' ') === 'is not defined') {
                         success = false;
-                        todoJSON[errorWords[0]] = null;
+                        projectJSON[errorWords[0]] = null;
                     } else {
                         throw err;
                     }
                 }
             }
-            this.$el.data('todoId', this.model.get('id'));
-            this.$el.data('todoDisplayPosition', this.model.get('display_position'));
+            this.$el.data('projectId', this.model.get('id'));
+            this.$el.data('projectDisplayPosition', this.model.get('display_position'));
             return this;
         },
 
@@ -87,5 +87,5 @@ define([
         }
     });
 
-    return TodoView;
+    return ProjectView;
 });
