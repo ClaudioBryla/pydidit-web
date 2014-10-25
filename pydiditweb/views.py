@@ -11,8 +11,7 @@ from .models import (
 
 # We can't survive without it.
 import pydiditbackend as b
-import os
-b.initialize(ini_filenames=(os.path.expanduser('~/.pydidit-webtestrc'),))
+b.initialize()
 
 
 import json
