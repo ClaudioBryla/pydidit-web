@@ -10,6 +10,8 @@ define([
     Config
 ) {
     Todo = Backbone.Model.extend({
+        primaryDescriptor: 'description',
+
         initialize: function() {
             this.set('type', 'Todo');
         },

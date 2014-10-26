@@ -61,7 +61,13 @@ define([
 
         edit: function() {
             var editTemplate = _.template($('#edit-template').html());
-            this.$el.html(editTemplate(this.model.toJSON()));
+            var modelData = _.clone(this.model.toJSON());
+            _.extend(modelData, {
+                'primaryDescriptor' : this.model.primaryDescriptor,
+                'initialValue' : this.model.get(this.model.primaryDescriptor),
+            });
+            this.$el.html(editTemplate(modelData));
+            //this.$el.html(editTemplate(this.model.toJSON()));
         },
 
         save: function() {

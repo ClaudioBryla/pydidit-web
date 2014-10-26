@@ -10,6 +10,8 @@ define([
     Config
 ) {
     Project = Backbone.Model.extend({
+        primaryDescriptor: 'description',
+
         initialize: function() {
             this.set('type', 'Project');
         },
