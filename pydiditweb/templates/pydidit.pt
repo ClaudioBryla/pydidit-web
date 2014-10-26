@@ -16,11 +16,14 @@
       <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#todo-tab" data-toggle="tab">Todos</a></li>
         <li><a href="#project-tab" data-toggle="tab">Projects</a></li>
+        <li><a href="#tag-tab" data-toggle="tab">Tags</a></li>
       </ul>
       <div class="tab-content">
         <div id="todo-tab" class="tab-pane active">
         </div>
         <div id="project-tab" class="tab-pane">
+        </div>
+        <div id="tag-tab" class="tab-pane">
         </div>
       </div>
     </div>
@@ -41,6 +44,10 @@
     <script type="text/template" id="project-create-template">
       <label for="description" class="control-label">Create Project:</label>
       <input type="text" class="form-control" id="description" name="description" />
+    </script>
+    <script type="text/template" id="tag-create-template">
+      <label for="tag-name" class="control-label">Create Tag:</label>
+      <input type="text" class="form-control" id="tag-name" name="tag-name" />
     </script>
     <script type="text/template" id="todo-template">
       <%- description %>
@@ -71,6 +78,19 @@
       <button type="button" class="btn btn-success btn-xs complete-project"><span class="glyphicon glyphicon-ok" /></button>
       <button type="button" class="btn btn-warning btn-xs edit-project"><span class="glyphicon glyphicon-pencil" /></button>
       <button type="button" class="btn btn-danger btn-xs remove-project"><span class="glyphicon glyphicon-remove" /></button>
+    </script>
+    <script type="text/template" id="tag-template">
+      <%- name %>
+      <div class="btn-group">
+      <button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown">
+        <span class="caret" />
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <li>Created at <%- created_at_formatted %></li>
+      </ul>
+      </div>
+      <button type="button" class="btn btn-warning btn-xs edit-tag"><span class="glyphicon glyphicon-pencil" /></button>
+      <button type="button" class="btn btn-danger btn-xs remove-tag"><span class="glyphicon glyphicon-remove" /></button>
     </script>
     <script type="text/template" id="edit-template">
       <div role="form" class="well form-group">

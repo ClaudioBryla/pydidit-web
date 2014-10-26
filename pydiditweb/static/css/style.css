@@ -1,7 +1,7 @@
 .todo, .project {
     margin: 5px;
 }
-.todos-list, .projects-list {
+.todos-list, .projects-list, .tags-list {
     list-style-type: none;
 }
 li.bg-danger {

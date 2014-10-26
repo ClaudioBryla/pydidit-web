@@ -36,12 +36,15 @@ def get(request):
         model_type = 'Todo'
     elif model_type == 'projects':
         model_type = 'Project'
+    elif model_type == 'tags':
+        model_type = 'Tag'
 
     filter_by = {}
     if len(request.matchdict['id']) > 0:
         filter_by['id'] = request.matchdict['id'][0] # Not supporting multiple for now
     else:
-        filter_by['state'] = 'active'
+        if model_type in ('Todo', 'Project'): # Tags don't have a state
+            filter_by['state'] = 'active'
 
     return json.dumps(b.get(model_type, filter_by=filter_by), default=datetime_handler)
 
@@ -55,6 +58,9 @@ def create(request):
     elif model_type == 'projects':
         model_type = 'Project'
         primary_descriptor = 'description'
+    elif model_type == 'tags':
+        model_type = 'Tag'
+        primary_descriptor = 'name'
 
     new_thing = b.put(model_type, request.json_body[primary_descriptor])
     return json.dumps(b.get(model_type, filter_by={'id': new_thing['id']}), default=datetime_handler)
@@ -69,6 +75,9 @@ def edit(request):
     elif model_type == 'projects':
         model_type = 'Project'
         primary_descriptor = 'description'
+    elif model_type == 'tags':
+        model_type = 'Tag'
+        primary_descriptor = 'name'
 
     to_update = b.get(model_type, filter_by={'id': request.matchdict['id']})[0]
     control = None
@@ -77,7 +86,7 @@ def edit(request):
         del request.json_body['pydiditweb_control']
     # Right now, you can only do one thing per call: set completed, move, update other attributes
     # These are in no particular order, really
-    if request.json_body['state'] == 'completed':
+    if 'state' in request.json_body and request.json_body['state'] == 'completed':
         b.set_completed(to_update)
     elif control is not None:
         if 'move_to_anchor' in control:
@@ -102,6 +111,8 @@ def delete(request):
         model_type = 'Todo'
     elif model_type == 'projects':
         model_type = 'Project'
+    elif model_type == 'tags':
+        model_type = 'Tag'
 
     b.delete_from_db({'type': model_type, 'id': request.matchdict['id']})
     return Response('OK')
