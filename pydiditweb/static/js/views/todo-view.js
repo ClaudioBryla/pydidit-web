@@ -67,7 +67,6 @@ define([
                 'initialValue' : this.model.get(this.model.primaryDescriptor),
             });
             this.$el.html(editTemplate(modelData));
-            //this.$el.html(editTemplate(this.model.toJSON()));
         },
 
         save: function() {
