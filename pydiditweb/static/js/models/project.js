@@ -9,11 +9,11 @@ define([
     Backbone,
     Config
 ) {
-    Todo = Backbone.Model.extend({
+    Project = Backbone.Model.extend({
         primaryDescriptor: 'description',
 
         initialize: function() {
-            this.set('type', 'Todo');
+            this.set('type', 'Project');
         },
 
         parse: function(response, options) {
@@ -47,5 +47,5 @@ define([
         },
     });
 
-    return Todo;
+    return Project;
 });

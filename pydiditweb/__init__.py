@@ -17,12 +17,11 @@ def main(global_config, **settings):
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_route('pydidit', '/')
     
-    # Todo Routes
-    config.add_route('get_todos', '/api/todos', request_method='GET')
-    config.add_route('get_todo', '/api/todos/{id}', request_method='GET')
-    config.add_route('create_todo', '/api/todos', request_method='POST')
-    config.add_route('edit_todo', '/api/todos/{id}', request_method='PUT')
-    config.add_route('delete_todo', '/api/todos/{id}', request_method='DELETE')
+    # Model-shared routes
+    config.add_route('get', '/api/{model_type}*id', request_method='GET')
+    config.add_route('create', '/api/{model_type}', request_method='POST')
+    config.add_route('edit', '/api/{model_type}/{id}', request_method='PUT')
+    config.add_route('delete', '/api/{model_type}/{id}', request_method='DELETE')
 
     config.scan()
     return config.make_wsgi_app()

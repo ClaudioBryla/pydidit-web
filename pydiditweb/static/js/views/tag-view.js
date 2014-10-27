@@ -7,16 +7,15 @@ define([
     _,
     Backbone
 ) {
-    TodoView = Backbone.View.extend({
+    TagView = Backbone.View.extend({
         tagName: 'li',
-        className: 'todo',
-        template: _.template($('#todo-template').html()),
+        className: 'tag',
+        template: _.template($('#tag-template').html()),
 
         events: {
-            'click .remove-todo': 'remove',
-            'click .edit-todo': 'edit',
+            'click .remove-tag': 'remove',
+            'click .edit-tag': 'edit',
             'click .save': 'save',
-            'click .complete-todo': 'complete',
             'click': 'model_dump' // For debug.
         },
 
@@ -25,26 +24,25 @@ define([
         },
 
         render: function() {
-            var todoJSON = this.model.toJSON();
+            var tagJSON = this.model.toJSON();
             // Protect against null values that are assigned by the backend later
             var success = false;
             while (!success) {
                 success = true;
                 try {
-                    this.$el.html(this.template(todoJSON));
+                    this.$el.html(this.template(tagJSON));
                 } catch (err) {
                     console.log(err);
                     var errorWords = err.message.split(' ');
                     if (errorWords.slice(1).join(' ') === 'is not defined') {
                         success = false;
-                        todoJSON[errorWords[0]] = null;
+                        tagJSON[errorWords[0]] = null;
                     } else {
                         throw err;
                     }
                 }
             }
-            this.$el.data('todoId', this.model.get('id'));
-            this.$el.data('todoDisplayPosition', this.model.get('display_position'));
+            this.$el.data('tagId', this.model.get('id'));
             return this;
         },
 
@@ -70,20 +68,9 @@ define([
         },
 
         save: function() {
-            var description = this.$el.children('div').children('#edit-description').val();
-            this.model.save({'description': description});
+            var name = this.$el.children('div').children('#edit-name').val();
+            this.model.save({'name': name});
             this.render();
-        },
-
-        complete: function() {
-            this.$el.addClass('bg-success');
-            this.$el.hide(
-                'slow',
-                function() {
-                    $(this).remove();
-                }
-            );
-            this.model.save({'state': 'completed'});
         },
 
         model_dump: function() {
@@ -92,5 +79,5 @@ define([
         }
     });
 
-    return TodoView;
+    return TagView;
 });
