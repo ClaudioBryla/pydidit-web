@@ -5,6 +5,7 @@ define([
     'views/project-view',
     'mustache',
     'text!templates/mustache/tab.mustache',
+    'text!templates/mustache/create.mustache',
     'bootstrap',
     'jqueryui'
 ], function (
@@ -13,7 +14,8 @@ define([
     Backbone,
     ProjectView,
     Mustache,
-    TabTemplate
+    TabTemplate,
+    CreateTemplate
 ) {
     ProjectsView = Backbone.View.extend({
         el: '#project-tab',
@@ -25,7 +27,7 @@ define([
         initialize: function() {
             this.listenTo(this.collection, 'add', function(project) {
                 this.renderOne(project);
-                var descriptionInput = this.$('#description');
+                var descriptionInput = this.$('#' + this.createInputId);
                 descriptionInput.val('');
                 descriptionInput.focus();
             });
@@ -35,6 +37,8 @@ define([
 
         createDivId: 'project-create-div',
 
+        createInputId: 'project-create-input',
+
         ulClass: 'projects-list',
 
         render: function() {
@@ -43,7 +47,10 @@ define([
                 'ulClass': this.ulClass,
                 'createDivId': this.createDivId,
             }));
-            var projectCreateNodes = $(_.template($('#project-create-template').html())());
+            var projectCreateNodes = $(Mustache.render(CreateTemplate, {
+                input_node_id: this.createInputId,
+                label_name: 'Project',
+            }));
             projectsDiv.children('#' + this.createDivId).prepend(projectCreateNodes);
             this.$el.append(projectsDiv);
 
@@ -97,7 +104,7 @@ define([
         },
 
         create: function() {
-            var description = this.$('#description').val();
+            var description = this.$('#' + this.createInputId).val();
             var newModel = this.collection.create({'description': description});
         },
 
