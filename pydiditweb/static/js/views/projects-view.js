@@ -88,6 +88,8 @@ define([
                             $.when.apply($, promises).done(function() {
                                 // Unlock it
                                 projectsDiv.children('.' + options.this.ulClass).sortable('option', 'disabled', false);
+                                // Remove the control stuff
+                                project.unset('pydiditweb_control');
                             });
                         },
                         this: this
