@@ -7,6 +7,7 @@ define([
     'text!templates/mustache/tag/primary_descriptor.mustache',
     'text!templates/mustache/tag/details.mustache',
     'text!templates/mustache/tag/buttons.mustache',
+    'text!templates/mustache/edit.mustache',
 ], function (
     $,
     _,
@@ -15,7 +16,8 @@ define([
     ItemTemplate,
     PrimaryDescriptorTemplate,
     DetailsTemplate,
-    ButtonsTemplate
+    ButtonsTemplate,
+    EditTemplate
 ) {
     TagView = Backbone.View.extend({
         tagName: 'li',
@@ -71,13 +73,13 @@ define([
         },
 
         edit: function() {
-            var editTemplate = _.template($('#edit-template').html());
+            //var editTemplate = _.template($('#edit-template').html());
             var modelData = _.clone(this.model.toJSON());
             _.extend(modelData, {
                 'primaryDescriptor' : this.model.primaryDescriptor,
                 'initialValue' : this.model.get(this.model.primaryDescriptor),
             });
-            this.$el.html(editTemplate(modelData));
+            this.$el.html(Mustache.render(EditTemplate, modelData));
         },
 
         save: function() {

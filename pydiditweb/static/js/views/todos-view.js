@@ -5,6 +5,7 @@ define([
     'views/todo-view',
     'mustache',
     'text!templates/mustache/tab.mustache',
+    'text!templates/mustache/create.mustache',
     'bootstrap',
     'jqueryui',
 ], function (
@@ -13,7 +14,8 @@ define([
     Backbone,
     TodoView,
     Mustache,
-    TabTemplate
+    TabTemplate,
+    CreateTemplate
 ) {
     TodosView = Backbone.View.extend({
         el: '#todo-tab',
@@ -25,7 +27,7 @@ define([
         initialize: function() {
             this.listenTo(this.collection, 'add', function(todo) {
                 this.renderOne(todo);
-                var descriptionInput = this.$('#description');
+                var descriptionInput = this.$('#' + this.createInputId);
                 descriptionInput.val('');
                 descriptionInput.focus();
             });
@@ -35,6 +37,8 @@ define([
 
         createDivId: 'todo-create-div',
 
+        createInputId: 'todo-create-input',
+
         ulClass: 'todos-list',
 
         render: function() {
@@ -43,7 +47,10 @@ define([
                 'ulClass': this.ulClass,
                 'createDivId': this.createDivId,
             }));
-            var todoCreateNodes = $(_.template($('#todo-create-template').html())());
+            var todoCreateNodes = $(Mustache.render(CreateTemplate, {
+                input_node_id: this.createInputId,
+                label_name: 'Todo',
+            }));
             todosDiv.children('#' + this.createDivId).prepend(todoCreateNodes);
             this.$el.append(todosDiv);
 
@@ -97,7 +104,7 @@ define([
         },
 
         create: function() {
-            var description = this.$('#description').val();
+            var description = this.$('#' + this.createInputId).val();
             var newModel = this.collection.create({'description': description});
         },
 

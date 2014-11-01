@@ -1,4 +1,4 @@
-.todo, .project {
+.todo, .project, .tag {
     margin: 5px;
 }
 .todos-list, .projects-list, .tags-list {
