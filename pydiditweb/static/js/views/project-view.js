@@ -1,16 +1,25 @@
 define([
     'jquery',
     'underscore-min',
-    'backbone-min'
+    'backbone-min',
+    'mustache',
+    'text!templates/mustache/item.mustache',
+    'text!templates/mustache/project/primary_descriptor.mustache',
+    'text!templates/mustache/project/details.mustache',
+    'text!templates/mustache/project/buttons.mustache',
 ], function (
     $,
     _,
-    Backbone
+    Backbone,
+    Mustache,
+    ItemTemplate,
+    PrimaryDescriptorTemplate,
+    DetailsTemplate,
+    ButtonsTemplate
 ) {
     ProjectView = Backbone.View.extend({
         tagName: 'li',
         className: 'project',
-        template: _.template($('#project-template').html()),
 
         events: {
             'click .remove-project': 'remove',
@@ -31,7 +40,11 @@ define([
             while (!success) {
                 success = true;
                 try {
-                    this.$el.html(this.template(projectJSON));
+                    this.$el.html(Mustache.render(ItemTemplate, projectJSON, {
+                        primary_descriptor: PrimaryDescriptorTemplate,
+                        details: DetailsTemplate,
+                        buttons: ButtonsTemplate,
+                    }));
                 } catch (err) {
                     console.log(err);
                     var errorWords = err.message.split(' ');
