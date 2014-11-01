@@ -3,17 +3,20 @@ define([
     'underscore-min',
     'backbone-min',
     'views/todo-view',
+    'mustache',
+    'text!templates/mustache/tab.mustache',
     'bootstrap',
-    'jqueryui'
+    'jqueryui',
 ], function (
     $,
     _,
     Backbone,
-    TodoView
+    TodoView,
+    Mustache,
+    TabTemplate
 ) {
     TodosView = Backbone.View.extend({
         el: '#todo-tab',
-        template: _.template($('#tab-template').html()),
 
         events: {
             'click #create': 'create'
@@ -35,7 +38,7 @@ define([
         ulClass: 'todos-list',
 
         render: function() {
-            var todosDiv = $(this.template({
+            var todosDiv = $(Mustache.render(TabTemplate, {
                 'tabTitle': 'Todos:',
                 'ulClass': this.ulClass,
                 'createDivId': this.createDivId,

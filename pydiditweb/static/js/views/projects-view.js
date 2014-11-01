@@ -3,17 +3,20 @@ define([
     'underscore-min',
     'backbone-min',
     'views/project-view',
+    'mustache',
+    'text!templates/mustache/tab.mustache',
     'bootstrap',
     'jqueryui'
 ], function (
     $,
     _,
     Backbone,
-    ProjectView
+    ProjectView,
+    Mustache,
+    TabTemplate
 ) {
     ProjectsView = Backbone.View.extend({
         el: '#project-tab',
-        template: _.template($('#tab-template').html()),
 
         events: {
             'click #create': 'create'
@@ -35,7 +38,7 @@ define([
         ulClass: 'projects-list',
 
         render: function() {
-            var projectsDiv = $(this.template({
+            var projectsDiv = $(Mustache.render(TabTemplate, {
                 'tabTitle': 'Projects:',
                 'ulClass': this.ulClass,
                 'createDivId': this.createDivId,

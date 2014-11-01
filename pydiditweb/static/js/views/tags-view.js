@@ -3,17 +3,20 @@ define([
     'underscore-min',
     'backbone-min',
     'views/tag-view',
+    'mustache',
+    'text!templates/mustache/tab.mustache',
     'bootstrap',
     'jqueryui'
 ], function (
     $,
     _,
     Backbone,
-    TagView
+    TagView,
+    Mustache,
+    TabTemplate
 ) {
     TagsView = Backbone.View.extend({
         el: '#tag-tab',
-        template: _.template($('#tab-template').html()),
 
         events: {
             'click #create': 'create'
@@ -35,7 +38,7 @@ define([
         ulClass: 'tags-list',
 
         render: function() {
-            var tagsDiv = $(this.template({
+            var tagsDiv = $(Mustache.render(TabTemplate, {
                 'tabTitle': 'Tags:',
                 'ulClass': this.ulClass,
                 'createDivId': this.createDivId,
