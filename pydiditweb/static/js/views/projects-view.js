@@ -3,17 +3,22 @@ define([
     'underscore-min',
     'backbone-min',
     'views/project-view',
+    'mustache',
+    'text!templates/mustache/tab.mustache',
+    'text!templates/mustache/create.mustache',
     'bootstrap',
     'jqueryui'
 ], function (
     $,
     _,
     Backbone,
-    ProjectView
+    ProjectView,
+    Mustache,
+    TabTemplate,
+    CreateTemplate
 ) {
     ProjectsView = Backbone.View.extend({
         el: '#project-tab',
-        template: _.template($('#tab-template').html()),
 
         events: {
             'click #create': 'create'
@@ -22,7 +27,7 @@ define([
         initialize: function() {
             this.listenTo(this.collection, 'add', function(project) {
                 this.renderOne(project);
-                var descriptionInput = this.$('#description');
+                var descriptionInput = this.$('#' + this.createInputId);
                 descriptionInput.val('');
                 descriptionInput.focus();
             });
@@ -32,15 +37,20 @@ define([
 
         createDivId: 'project-create-div',
 
+        createInputId: 'project-create-input',
+
         ulClass: 'projects-list',
 
         render: function() {
-            var projectsDiv = $(this.template({
+            var projectsDiv = $(Mustache.render(TabTemplate, {
                 'tabTitle': 'Projects:',
                 'ulClass': this.ulClass,
                 'createDivId': this.createDivId,
             }));
-            var projectCreateNodes = $(_.template($('#project-create-template').html())());
+            var projectCreateNodes = $(Mustache.render(CreateTemplate, {
+                input_node_id: this.createInputId,
+                label_name: 'Project',
+            }));
             projectsDiv.children('#' + this.createDivId).prepend(projectCreateNodes);
             this.$el.append(projectsDiv);
 
@@ -78,6 +88,8 @@ define([
                             $.when.apply($, promises).done(function() {
                                 // Unlock it
                                 projectsDiv.children('.' + options.this.ulClass).sortable('option', 'disabled', false);
+                                // Remove the control stuff
+                                project.unset('pydiditweb_control');
                             });
                         },
                         this: this
@@ -94,7 +106,7 @@ define([
         },
 
         create: function() {
-            var description = this.$('#description').val();
+            var description = this.$('#' + this.createInputId).val();
             var newModel = this.collection.create({'description': description});
         },
 

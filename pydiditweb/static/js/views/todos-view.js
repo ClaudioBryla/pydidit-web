@@ -3,17 +3,22 @@ define([
     'underscore-min',
     'backbone-min',
     'views/todo-view',
+    'mustache',
+    'text!templates/mustache/tab.mustache',
+    'text!templates/mustache/create.mustache',
     'bootstrap',
-    'jqueryui'
+    'jqueryui',
 ], function (
     $,
     _,
     Backbone,
-    TodoView
+    TodoView,
+    Mustache,
+    TabTemplate,
+    CreateTemplate
 ) {
     TodosView = Backbone.View.extend({
         el: '#todo-tab',
-        template: _.template($('#tab-template').html()),
 
         events: {
             'click #create': 'create'
@@ -22,7 +27,7 @@ define([
         initialize: function() {
             this.listenTo(this.collection, 'add', function(todo) {
                 this.renderOne(todo);
-                var descriptionInput = this.$('#description');
+                var descriptionInput = this.$('#' + this.createInputId);
                 descriptionInput.val('');
                 descriptionInput.focus();
             });
@@ -32,15 +37,20 @@ define([
 
         createDivId: 'todo-create-div',
 
+        createInputId: 'todo-create-input',
+
         ulClass: 'todos-list',
 
         render: function() {
-            var todosDiv = $(this.template({
+            var todosDiv = $(Mustache.render(TabTemplate, {
                 'tabTitle': 'Todos:',
                 'ulClass': this.ulClass,
                 'createDivId': this.createDivId,
             }));
-            var todoCreateNodes = $(_.template($('#todo-create-template').html())());
+            var todoCreateNodes = $(Mustache.render(CreateTemplate, {
+                input_node_id: this.createInputId,
+                label_name: 'Todo',
+            }));
             todosDiv.children('#' + this.createDivId).prepend(todoCreateNodes);
             this.$el.append(todosDiv);
 
@@ -78,6 +88,8 @@ define([
                             $.when.apply($, promises).done(function() {
                                 // Unlock it
                                 todosDiv.children('.' + options.this.ulClass).sortable('option', 'disabled', false);
+                                // Remove the control stuff
+                                todo.unset('pydiditweb_control');
                             });
                         },
                         this: this
@@ -94,7 +106,7 @@ define([
         },
 
         create: function() {
-            var description = this.$('#description').val();
+            var description = this.$('#' + this.createInputId).val();
             var newModel = this.collection.create({'description': description});
         },
 

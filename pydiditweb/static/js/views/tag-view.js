@@ -1,16 +1,27 @@
 define([
     'jquery',
     'underscore-min',
-    'backbone-min'
+    'backbone-min',
+    'mustache',
+    'text!templates/mustache/item.mustache',
+    'text!templates/mustache/tag/primary_descriptor.mustache',
+    'text!templates/mustache/tag/details.mustache',
+    'text!templates/mustache/tag/buttons.mustache',
+    'text!templates/mustache/edit.mustache',
 ], function (
     $,
     _,
-    Backbone
+    Backbone,
+    Mustache,
+    ItemTemplate,
+    PrimaryDescriptorTemplate,
+    DetailsTemplate,
+    ButtonsTemplate,
+    EditTemplate
 ) {
     TagView = Backbone.View.extend({
         tagName: 'li',
         className: 'tag',
-        template: _.template($('#tag-template').html()),
 
         events: {
             'click .remove-tag': 'remove',
@@ -30,7 +41,11 @@ define([
             while (!success) {
                 success = true;
                 try {
-                    this.$el.html(this.template(tagJSON));
+                    this.$el.html(Mustache.render(ItemTemplate, tagJSON, {
+                        primary_descriptor: PrimaryDescriptorTemplate,
+                        details: DetailsTemplate,
+                        buttons: ButtonsTemplate,
+                    }));
                 } catch (err) {
                     console.log(err);
                     var errorWords = err.message.split(' ');
@@ -58,13 +73,13 @@ define([
         },
 
         edit: function() {
-            var editTemplate = _.template($('#edit-template').html());
+            //var editTemplate = _.template($('#edit-template').html());
             var modelData = _.clone(this.model.toJSON());
             _.extend(modelData, {
                 'primaryDescriptor' : this.model.primaryDescriptor,
                 'initialValue' : this.model.get(this.model.primaryDescriptor),
             });
-            this.$el.html(editTemplate(modelData));
+            this.$el.html(Mustache.render(EditTemplate, modelData));
         },
 
         save: function() {

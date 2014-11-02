@@ -3,17 +3,22 @@ define([
     'underscore-min',
     'backbone-min',
     'views/tag-view',
+    'mustache',
+    'text!templates/mustache/tab.mustache',
+    'text!templates/mustache/create.mustache',
     'bootstrap',
     'jqueryui'
 ], function (
     $,
     _,
     Backbone,
-    TagView
+    TagView,
+    Mustache,
+    TabTemplate,
+    CreateTemplate
 ) {
     TagsView = Backbone.View.extend({
         el: '#tag-tab',
-        template: _.template($('#tab-template').html()),
 
         events: {
             'click #create': 'create'
@@ -22,7 +27,7 @@ define([
         initialize: function() {
             this.listenTo(this.collection, 'add', function(tag) {
                 this.renderOne(tag);
-                var nameInput = this.$('#tag-name');
+                var nameInput = this.$('#' + this.createInputId);
                 nameInput.val('');
                 nameInput.focus();
             });
@@ -32,15 +37,20 @@ define([
 
         createDivId: 'tag-create-div',
 
+        createInputId: 'tag-create-input',
+
         ulClass: 'tags-list',
 
         render: function() {
-            var tagsDiv = $(this.template({
+            var tagsDiv = $(Mustache.render(TabTemplate, {
                 'tabTitle': 'Tags:',
                 'ulClass': this.ulClass,
                 'createDivId': this.createDivId,
             }));
-            var tagCreateNodes = $(_.template($('#tag-create-template').html())());
+            var tagCreateNodes = $(Mustache.render(CreateTemplate, {
+                input_node_id: this.createInputId,
+                label_name: 'Tag',
+            }));
             tagsDiv.children('#' + this.createDivId).prepend(tagCreateNodes);
             this.$el.append(tagsDiv);
 
@@ -53,7 +63,7 @@ define([
         },
 
         create: function() {
-            var name = this.$('#tag-name').val();
+            var name = this.$('#' + this.createInputId).val();
             var newModel = this.collection.create({'name': name});
         },
 
